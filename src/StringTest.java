@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StringTest {
     public static void main(String[] args) {
@@ -14,7 +16,6 @@ public class StringTest {
         System.out.println( Integer.highestOneBit((8 - 1) << 1));
 
         HashMap<String, String> map = new HashMap<>(1 << 5);
-
     }
 
 
@@ -26,5 +27,42 @@ public class StringTest {
             res.append(strs[i] + " "); // 将单词拼接至 StringBuilder
         }
         return res.toString().trim(); // 转化为字符串，删除尾部空格，并返回
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        char[] chars = s.toCharArray();
+        HashSet<Character> set = new HashSet<Character>();
+        for (char c : chars) {
+            set.add(c);
+        }
+        return set.size();
+    }
+
+    public int lengthOfLongestSubstring1(String s) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        int max = 0, start = 0;
+        for (int end = 0; end < s.length(); end++) {
+            char ch = s.charAt(end);
+            if (map.containsKey(ch)){
+                start = Math.max(map.get(ch)+1,start);
+            }
+            max = Math.max(max,end - start + 1);
+            map.put(ch,end);
+        }
+        return max;
+    }
+
+    public int lengthOfLongestSubstring2(String s) {
+        Set<Character> set = new HashSet<>();
+        int i = 0, j = 0, max = 0, length = s.length();
+        while (i < length && j < length) {
+            if (!set.contains(s.charAt(j))) {
+                set.add(s.charAt(j++));
+                max = Math.max(max, j - i);
+            } else {
+                set.remove(s.charAt(i++));
+            }
+        }
+        return max;
     }
 }
